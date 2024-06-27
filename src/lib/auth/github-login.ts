@@ -5,7 +5,7 @@ export async function signInWithGithub() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-            redirectTo: `http://localhost:3000/auth/callback`,
+            redirectTo: `https://postsapp-du5gq7wmo-kamils-projects-85981210.vercel.app/auth/callback`,
         },
     })
 }
