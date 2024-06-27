@@ -13,8 +13,16 @@ const Page = async ({params}: any) => {
             id: params.postId
         }
     }) as tPost;
-    const amountOfLikes = await prisma.like.count()
-    const amountOfDislikes = await prisma.dislike.count()
+    const amountOfLikes = await prisma.like.count({
+        where: {
+            postId: params.postId
+        }
+    })
+    const amountOfDislikes = await prisma.dislike.count({
+        where: {
+            postId: params.postId
+        }
+    })
     return (
         <div className={"text-center"}>
             <Suspense fallback={"Loading..."}>
