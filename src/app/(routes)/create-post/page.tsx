@@ -17,8 +17,7 @@ const Page = () => {
         }
         else{
             await addPost(formData);
-            await router.refresh()
-            router.push("/")
+            await router.push("/")
         }
     };
 

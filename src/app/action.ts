@@ -18,6 +18,7 @@ export const addPost = async (formData: FormData) => {
                 userId: id
             }});
     }
+    revalidatePath("/")
 }
 
 export const addLike = async (postId: string) => {
