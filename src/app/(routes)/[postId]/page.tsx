@@ -7,20 +7,20 @@ import {createClient} from "@/lib/supabase/server";
 const Page = async ({params}: any) => {
     const supabase = createClient()
     const {data: {user}, error} = await supabase.auth.getUser()
-
+    const id = await params.postId
     const post = await prisma.post.findUnique({
         where: {
-            id: params.postId
+            id: id
         }
     }) as tPost;
     const amountOfLikes = await prisma.like.count({
         where: {
-            postId: params.postId
+            postId: id
         }
     })
     const amountOfDislikes = await prisma.dislike.count({
         where: {
-            postId: params.postId
+            postId: id
         }
     })
     return (
@@ -30,7 +30,7 @@ const Page = async ({params}: any) => {
                     <>
                         <h2 className="text-2xl font-bold">{post.title}</h2>
                         <p>{post.content}</p>
-                        <LikeAndDislikeButtons id={params.postId} isUserLoggedIn={user} />
+                        <LikeAndDislikeButtons id={id} isUserLoggedIn={user} />
                         <div className="flex justify-around">
                             <p>{amountOfLikes}</p>
                             <p>{amountOfDislikes}</p>

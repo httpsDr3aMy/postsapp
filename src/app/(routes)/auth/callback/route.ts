@@ -29,14 +29,10 @@ export async function GET(request: Request) {
             }
         );
 
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (error) {
-            return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-        }
-
         const { data, error: userError } = await supabase.auth.getUser();
-        if(data.user){
-            const { id, email } = data.user;
+        const user = await data.user
+        if(user){
+            const { id, email } = user;
             if (userError) {
                 return NextResponse.redirect(`${origin}/auth/auth-code-error`);
             }
@@ -55,6 +51,12 @@ export async function GET(request: Request) {
                     });
                 }
             }
+        }
+
+
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+            return NextResponse.redirect(`${origin}/auth/auth-code-error`);
         }
 
         return NextResponse.redirect(`${origin}${next}`);
