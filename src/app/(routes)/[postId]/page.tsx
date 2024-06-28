@@ -8,40 +8,41 @@ const Page = async ({params}: any) => {
     const supabase = createClient()
     const {data: {user}, error} = await supabase.auth.getUser()
     const id = await params.postId
-    const post = await prisma.post.findUnique({
-        where: {
-            id: id
-        }
-    }) as tPost;
-    const amountOfLikes = await prisma.like.count({
-        where: {
-            postId: id
-        }
-    })
-    const amountOfDislikes = await prisma.dislike.count({
-        where: {
-            postId: id
-        }
-    })
-    return (
-        <div className={"text-center"}>
-            <Suspense fallback={"Loading..."}>
-                {post ? (
-                    <>
-                        <h2 className="text-2xl font-bold">{post.title}</h2>
-                        <p>{post.content}</p>
-                        <LikeAndDislikeButtons id={id} isUserLoggedIn={user} />
-                        <div className="flex justify-around">
-                            <p>{amountOfLikes}</p>
-                            <p>{amountOfDislikes}</p>
-                        </div>
-                    </>
-                ) : (
-                    <p className={"text-4xl font-bold"}>Post not found</p>
-                )}
-        </Suspense>
-</div>
-);
+    if(id){
+        const post = await prisma.post.findUnique({
+            where: {
+                id: id
+            }
+        }) as tPost;
+        const amountOfLikes = await prisma.like.count({
+            where: {
+                postId: id
+            }
+        })
+        const amountOfDislikes = await prisma.dislike.count({
+            where: {
+                postId: id
+            }
+        })
+        return (
+            <div className={"text-center"}>
+                <Suspense fallback={"Loading..."}>
+                    {post ? (
+                        <>
+                            <h2 className="text-2xl font-bold">{post.title}</h2>
+                            <p>{post.content}</p>
+                            <LikeAndDislikeButtons id={id} isUserLoggedIn={user} />
+                            <div className="flex justify-around">
+                                <p>{amountOfLikes}</p>
+                                <p>{amountOfDislikes}</p>
+                            </div>
+                        </>
+                    ) : (
+                        <p className={"text-4xl font-bold"}>Post not found</p>
+                    )}
+                </Suspense>
+            </div>);
+    }
 };
 
 export default Page;
